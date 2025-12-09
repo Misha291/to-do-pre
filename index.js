@@ -12,7 +12,10 @@ const formElement = document.querySelector(".to-do__form");
 const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
-
+  const tasksFromStorage = localStorage.getItem("tasks");
+  if (tasksFromStorage) {
+    return JSON.parse(tasksFromStorage)
+  } return items
 }
 
 function createItem(item) {
