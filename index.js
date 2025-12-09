@@ -26,7 +26,7 @@ function createItem(item) {
   const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");   //<button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
   const editButton = clone.querySelector(".to-do__item-button_type_edit");             //<button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
 
-  textElement.textContent = item;
+  textElement.textContent = item;   // заполняет <span> текстом 
   
   deleteButton.addEventListener("click", () => {
     clone.remove()
