@@ -19,13 +19,41 @@ function loadTasks() {
 }
 
 function createItem(item) {
-	const template = document.getElementById("to-do__item-template");
-	const clone = template.content.querySelector(".to-do__item").cloneNode(true);
-  const textElement = clone.querySelector(".to-do__item-text");
-  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
-  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
-  const editButton = clone.querySelector(".to-do__item-button_type_edit");
+	const template = document.getElementById("to-do__item-template");                  //<template id="to-do__item-template">
+	const clone = template.content.querySelector(".to-do__item").cloneNode(true);      //<li class="to-do__item">
+  const textElement = clone.querySelector(".to-do__item-text");                        //<span class="to-do__item-text"></span>
+  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");         //<button class="to-do__item-button to-do__item-button_type_delete" aria-label="Удалить"></button>
+  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");   //<button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
+  const editButton = clone.querySelector(".to-do__item-button_type_edit");             //<button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
 
+  textElement.textContent = item;
+  
+  deleteButton.addEventListener("click", () => {
+    clone.remove()
+    const items = getTasksFromDOM()
+    saveTasks(items)
+  })
+
+  duplicateButton.addEventListener("click", () => {
+    const itemName = textElement.textContent
+    const newItem = createItem(itemName)
+    listElement.prepend(newItem)
+    const items = getTasksFromDOM()
+    saveTasks(items)
+  });
+
+  editButton.addEventListener("click", () => {
+    textElement.setAttribute("contenteditable", "true")
+    textElement.focus()
+  })
+
+  textElement.addEventListener("blur", () => {
+    textElement.setAttribute("contenteditable", "false")
+    const items = getTasksFromDOM()
+    saveTasks(items)
+  })
+
+  return clone
 }
 
 function getTasksFromDOM() {
