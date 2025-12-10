@@ -1,10 +1,10 @@
 let items = [
-	"Сделать проектную работу",
-	"Полить цветы",
-	"Пройти туториал по Реакту",
-	"Сделать фронт для своего проекта",
-	"Прогуляться по улице в солнечный день",
-	"Помыть посуду",
+  "Сделать проектную работу",
+  "Полить цветы",
+  "Пройти туториал по Реакту",
+  "Сделать фронт для своего проекта",
+  "Прогуляться по улице в солнечный день",
+  "Помыть посуду",
 ];
 
 const listElement = document.querySelector(".to-do__list");
@@ -12,29 +12,32 @@ const formElement = document.querySelector(".to-do__form");
 const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
-  const tasksFromStorage = localStorage.getItem("tasks");
-  if (tasksFromStorage) {
+  const tasksFromStorage = localStorage.getItem("events");
+  if (tasksFromStorage) {                                     //поиск ячеек написанных пользовтелем, если да то превращение из строки в массив, если нет, то возвращение изначального массива item
     return JSON.parse(tasksFromStorage)
-  } return items
+  } 
+  return items
 }
 
-function createItem(item) {
-	const template = document.getElementById("to-do__item-template");                  //<template id="to-do__item-template">
-	const clone = template.content.querySelector(".to-do__item").cloneNode(true);      //<li class="to-do__item">
+function createItem(item) {                                                            
+  const template = document.getElementById("to-do__item-template");                    //<template id="to-do__item-template">
+  const clone = template.content.querySelector(".to-do__item").cloneNode(true);        //<li class="to-do__item">
   const textElement = clone.querySelector(".to-do__item-text");                        //<span class="to-do__item-text"></span>
   const deleteButton = clone.querySelector(".to-do__item-button_type_delete");         //<button class="to-do__item-button to-do__item-button_type_delete" aria-label="Удалить"></button>
   const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");   //<button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
   const editButton = clone.querySelector(".to-do__item-button_type_edit");             //<button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
 
-  textElement.textContent = item;   // заполняет <span> текстом 
+  textElement.textContent = item; // заполняет <span> текстом 
   
-  deleteButton.addEventListener("click", () => {
+  deleteButton.addEventListener("click", function() 
+  {
     clone.remove()
     const items = getTasksFromDOM()
     saveTasks(items)
   })
 
-  duplicateButton.addEventListener("click", () => {
+  duplicateButton.addEventListener("click", function() 
+  {
     const itemName = textElement.textContent
     const newItem = createItem(itemName)
     listElement.prepend(newItem)
@@ -42,12 +45,14 @@ function createItem(item) {
     saveTasks(items)
   });
 
-  editButton.addEventListener("click", () => {
+  editButton.addEventListener("click", function() 
+  {
     textElement.setAttribute("contenteditable", "true")
     textElement.focus()
   })
 
-  textElement.addEventListener("blur", () => {
+  textElement.addEventListener("blur", function() 
+  {
     textElement.setAttribute("contenteditable", "false")
     const items = getTasksFromDOM()
     saveTasks(items)
@@ -57,118 +62,31 @@ function createItem(item) {
 }
 
 function getTasksFromDOM() {
-
-}
-
-
-function saveTasks(tasks) {
-
-}
-
-
-// не изначальные данные - (переделать если не правильно)
-//let items = [
-	"Сделать проектную работу",
-	"Полить цветы",
-	"Пройти туториал по Реакту",
-	"Сделать фронт для своего проекта",
-	"Прогуляться по улице в солнечный день",
-	"Помыть посуду",
-];
-
-const listElement = document.querySelector(".to-do__list");
-const formElement = document.querySelector(".to-do__form");
-const inputElement = document.querySelector(".to-do__input");
-
-function loadTasks() {
-  const savedTasks = localStorage.getItem('todoTasks');
-  if (savedTasks) {
-    return JSON.parse(savedTasks);
-  } else {
-    return items;
-  }
-}
-
-function createItem(item) {
-  const template = document.getElementById("to-do__item-template");
-  const clone = template.content.querySelector(".to-do__item").cloneNode(true);
-  const textElement = clone.querySelector(".to-do__item-text");
-  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
-  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
-  const editButton = clone.querySelector(".to-do__item-button_type_edit");
+  const itemsNamesElements = document.querySelectorAll(".to-do__item-text")
+  const tasks = []                                                                  //находит все элементы <span>, обрезает и записывает в пустой массив 
   
-  textElement.textContent = item;
-
-  deleteButton.addEventListener('click', () => {
-    clone.remove();
-    const items = getTasksFromDOM();
-    saveTasks(items);
-  });
-
-  duplicateButton.addEventListener('click', () => {
-    const itemName = textElement.textContent;
-    const newItem = createItem(itemName);
-    listElement.prepend(newItem);
-    const items = getTasksFromDOM();
-    saveTasks(items);
-  });
-
-  editButton.addEventListener('click', () => {
-    textElement.setAttribute('contenteditable', 'true');
-    textElement.focus();
-  });
-
-  textElement.addEventListener('blur', () => {
-  textElement.setAttribute('contenteditable', 'false');
-  const items = getTasksFromDOM();
-  saveTasks(items);
-});
-
-textElement.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    textElement.blur();
-  }
-});
-
-  return clone;
-}
-
-function getTasksFromDOM() {
-  const itemsNamesElements = listElement.querySelectorAll('.to-do__item-text');
-  const tasks = [];
+  itemsNamesElements.forEach(function(element) {
+    tasks.push(element.textContent)
+  })
   
-  itemsNamesElements.forEach(element => {
-    tasks.push(element.textContent);
-  });
-  
-  return tasks;
+  return tasks
 }
 
 function saveTasks(tasks) {
-  localStorage.setItem('todoTasks', JSON.stringify(tasks));
+  localStorage.setItem("events", JSON.stringify(tasks))
 }
 
-function renderTasks() {
-  listElement.innerHTML = '';
-  items.forEach(item => {
-    const taskElement = createItem(item);
-    listElement.append(taskElement);
-  });
-}
+items = loadTasks()
+items.forEach(function(item) {
+  const newItem = createItem(item)   //создаёт HTML-элемент для этой задачи
+  listElement.append(newItem)        //добавляет его в список на странице
+})
 
-formElement.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const taskText = inputElement.value.trim();
-  
-  if (taskText !== '') {
-    const taskElement = createItem(taskText);
-    listElement.prepend(taskElement);
-    items = getTasksFromDOM();
-    saveTasks(items);
-    inputElement.value = '';
-  }
-});
-
-items = loadTasks();
-renderTasks();
+formElement.addEventListener("submit", function(event) {
+  event.preventDefault()
+  const newItem = createItem(inputElement.value)
+  listElement.prepend(newItem)
+  const items = getTasksFromDOM()
+  saveTasks(items)
+  formElement.reset()
+})
