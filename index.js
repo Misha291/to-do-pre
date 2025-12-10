@@ -7,9 +7,9 @@ let items = [
   "Помыть посуду",
 ];
 
-const listElement = document.querySelector(".to-do__list");
-const formElement = document.querySelector(".to-do__form");
-const inputElement = document.querySelector(".to-do__input");
+const listElement = document.querySelector(".to-do__list");    //Найди на странице элемент по CSS-селектору, чтобы в дальнейшем работать с ним
+const formElement = document.querySelector(".to-do__form");    // кнопка добавить
+const inputElement = document.querySelector(".to-do__input");  
 
 function loadTasks() {
   const tasksFromStorage = localStorage.getItem("events");
@@ -29,14 +29,14 @@ function createItem(item) {
 
   textElement.textContent = item; // заполняет <span> текстом 
   
-  deleteButton.addEventListener("click", function() 
+  deleteButton.addEventListener("click", function() // удалить
   {
-    clone.remove()
-    const items = getTasksFromDOM()
-    saveTasks(items)
+    clone.remove()    // Удаляется сама задача со страницы
+    const items = getTasksFromDOM()    // Страница перечитывает все оставшиеся задачи
+    saveTasks(items) // Сохраняет их 
   })
 
-  duplicateButton.addEventListener("click", function() 
+  duplicateButton.addEventListener("click", function()  // копировать
   {
     const itemName = textElement.textContent
     const newItem = createItem(itemName)
@@ -45,15 +45,15 @@ function createItem(item) {
     saveTasks(items)
   });
 
-  editButton.addEventListener("click", function() 
+  editButton.addEventListener("click", function()   // редактировать
   {
-    textElement.setAttribute("contenteditable", "true")
-    textElement.focus()
+    textElement.setAttribute("contenteditable", "true")     // добавляет или изменяет атрибут (contenteditable) у html элемента
+    textElement.focus()  // ставит курсор внутрь текста 
   })
 
-  textElement.addEventListener("blur", function() 
+  textElement.addEventListener("blur", function() // клик вне редактируемой области (редактирование закончено)
   {
-    textElement.setAttribute("contenteditable", "false")
+    textElement.setAttribute("contenteditable", "false")  
     const items = getTasksFromDOM()
     saveTasks(items)
   })
@@ -76,17 +76,19 @@ function saveTasks(tasks) {
   localStorage.setItem("events", JSON.stringify(tasks))
 }
 
-items = loadTasks()
-items.forEach(function(item) {
+items = loadTasks()  // инициализация актуального списка задач 
+items.forEach(function(item) 
+{
   const newItem = createItem(item)   //создаёт HTML-элемент для этой задачи
   listElement.append(newItem)        //добавляет его в список на странице
 })
 
-formElement.addEventListener("submit", function(event) {
-  event.preventDefault()
+formElement.addEventListener("submit", function(event) // Назначает действие на отправку формы (когда пользователь нажимает «Добавить» или Enter в поле ввода)
+{
+  event.preventDefault()  // отменяет перезагрузку
   const newItem = createItem(inputElement.value)
   listElement.prepend(newItem)
   const items = getTasksFromDOM()
   saveTasks(items)
-  formElement.reset()
+  formElement.reset()  // очищает поле ввода после отправки формы
 })
