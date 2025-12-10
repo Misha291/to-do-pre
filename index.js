@@ -172,5 +172,3 @@ formElement.addEventListener('submit', (event) => {
 
 items = loadTasks();
 renderTasks();
-
-
