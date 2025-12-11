@@ -7,36 +7,36 @@ let items = [
   "Помыть посуду",
 ];
 
-const listElement = document.querySelector(".to-do__list");    //Найди на странице элемент по CSS-селектору, чтобы в дальнейшем работать с ним
-const formElement = document.querySelector(".to-do__form");    // кнопка добавить
+const listElement = document.querySelector(".to-do__list");    
+const formElement = document.querySelector(".to-do__form");    
 const inputElement = document.querySelector(".to-do__input");  
 
 function loadTasks() {
   const tasksFromStorage = localStorage.getItem("events");
-  if (tasksFromStorage) {                                     //поиск ячеек написанных пользовтелем, если да то превращение из строки в массив, если нет, то возвращение изначального массива item
+  if (tasksFromStorage) {                                     
     return JSON.parse(tasksFromStorage)
   } 
   return items
 }
 
 function createItem(item) {                                                            
-  const template = document.getElementById("to-do__item-template");                    //<template id="to-do__item-template">
-  const clone = template.content.querySelector(".to-do__item").cloneNode(true);        //<li class="to-do__item">
-  const textElement = clone.querySelector(".to-do__item-text");                        //<span class="to-do__item-text"></span>
-  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");         //<button class="to-do__item-button to-do__item-button_type_delete" aria-label="Удалить"></button>
-  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");   //<button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
-  const editButton = clone.querySelector(".to-do__item-button_type_edit");             //<button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
+  const template = document.getElementById("to-do__item-template");                    
+  const clone = template.content.querySelector(".to-do__item").cloneNode(true);       
+  const textElement = clone.querySelector(".to-do__item-text");                       
+  const deleteButton = clone.querySelector(".to-do__item-button_type_delete");         
+  const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");   
+  const editButton = clone.querySelector(".to-do__item-button_type_edit");            
 
-  textElement.textContent = item; // заполняет <span> текстом 
+  textElement.textContent = item; 
   
-  deleteButton.addEventListener("click", function() // удалить
+  deleteButton.addEventListener("click", function()
   {
-    clone.remove()    // Удаляется сама задача со страницы
-    const items = getTasksFromDOM()    // Страница перечитывает все оставшиеся задачи
-    saveTasks(items) // Сохраняет их 
+    clone.remove()
+    const items = getTasksFromDOM()   
+    saveTasks(items)
   })
 
-  duplicateButton.addEventListener("click", function()  // копировать
+  duplicateButton.addEventListener("click", function()
   {
     const itemName = textElement.textContent
     const newItem = createItem(itemName)
@@ -45,13 +45,13 @@ function createItem(item) {
     saveTasks(items)
   });
 
-  editButton.addEventListener("click", function()   // редактировать
+  editButton.addEventListener("click", function()
   {
-    textElement.setAttribute("contenteditable", "true")     // добавляет или изменяет атрибут (contenteditable) у html элемента
-    textElement.focus()  // ставит курсор внутрь текста 
+    textElement.setAttribute("contenteditable", "true")
+    textElement.focus() 
   })
 
-  textElement.addEventListener("blur", function() // клик вне редактируемой области (редактирование закончено)
+  textElement.addEventListener("blur", function()
   {
     textElement.setAttribute("contenteditable", "false")  
     const items = getTasksFromDOM()
@@ -63,7 +63,7 @@ function createItem(item) {
 
 function getTasksFromDOM() {
   const itemsNamesElements = document.querySelectorAll(".to-do__item-text")
-  const tasks = []                                                                  //находит все элементы <span>, обрезает и записывает в пустой массив 
+  const tasks = []                                                                 
   
   itemsNamesElements.forEach(function(element) {
     tasks.push(element.textContent)
@@ -76,19 +76,19 @@ function saveTasks(tasks) {
   localStorage.setItem("events", JSON.stringify(tasks))
 }
 
-items = loadTasks()  // инициализация актуального списка задач 
+items = loadTasks()  
 items.forEach(function(item) 
 {
-  const newItem = createItem(item)   //создаёт HTML-элемент для этой задачи
-  listElement.append(newItem)        //добавляет его в список на странице
+  const newItem = createItem(item) 
+  listElement.append(newItem)       
 })
 
-formElement.addEventListener("submit", function(event) // Назначает действие на отправку формы (когда пользователь нажимает «Добавить» или Enter в поле ввода)
+formElement.addEventListener("submit", function(event) 
 {
-  event.preventDefault()  // отменяет перезагрузку
+  event.preventDefault() 
   const newItem = createItem(inputElement.value)
   listElement.prepend(newItem)
   const items = getTasksFromDOM()
   saveTasks(items)
-  formElement.reset()  // очищает поле ввода после отправки формы
+  formElement.reset()
 })
